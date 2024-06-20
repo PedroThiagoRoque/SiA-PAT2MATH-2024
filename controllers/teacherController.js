@@ -1,6 +1,5 @@
 const Teacher = require('../models/teacher');
 const Student = require('../models/student');
-const Course = require('../models/course');
 
 exports.getTeacherDashboard = async (req, res) => {
     try {
