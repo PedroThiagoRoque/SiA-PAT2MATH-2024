@@ -1,5 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser');
+
 require('dotenv').config();
 
 const app = express();
@@ -10,6 +12,7 @@ connectDB();
 // Middleware para parsear JSON e dados de formulário
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Configurar EJS como mecanismo de visualização
 app.set('view engine', 'ejs');

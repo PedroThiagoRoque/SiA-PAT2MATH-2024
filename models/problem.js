@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ProblemSchema = new Schema({
-    title: {
+    statement: {
         type: String,
         required: true
     },
-    description: {
+    algebraicExpression: {
+        type: String,
+        required: true
+    },
+    knowledgeArea: {
         type: String,
         required: true
     },

@@ -30,19 +30,26 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
-    
     try {
-        console.log("ué: ", req.body);
         let user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ msg: 'Usuário Inválido.' });
+        if (!user) return res.status(400).json({ msg: 'Invalid Credentials' });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: 'Credencial Inválida.' });
+        if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
 
         const payload = { user: { id: user.id, role: user.role } };
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
             if (err) throw err;
-            res.json({ token });
+
+            res.cookie('token', token, { httpOnly: true });
+
+            if (user.role === 'student') {
+                res.redirect('/student-hub');
+            } else if (user.role === 'teacher') {
+                res.redirect('/teacher-dashboard');
+            } else {
+                res.status(400).json({ msg: 'Invalid user role' });
+            }
         });
     } catch (err) {
         console.error(err.message);

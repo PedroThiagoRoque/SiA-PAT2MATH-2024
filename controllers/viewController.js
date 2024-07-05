@@ -4,7 +4,7 @@ const Problem = require('../models/problem');
 
 exports.getStudentHub = async (req, res) => {
     try {
-        const student = await Student.findOne({ userId: req.user.id }).populate('enrolledCourses');
+        const student = await Student.findOne({ userId: req.user.id }).populate('userId').populate('enrolledCourses');
         if (!student) return res.status(404).json({ msg: 'Student not found' });
         res.render('studentHub', { student });
     } catch (err) {
@@ -15,7 +15,7 @@ exports.getStudentHub = async (req, res) => {
 
 exports.getTeacherDashboard = async (req, res) => {
     try {
-        const teacher = await Teacher.findOne({ userId: req.user.id }).populate('managedCourses students');
+        const teacher = await Teacher.findOne({ userId: req.user.id }).populate('managedCourses').populate('students');
         if (!teacher) return res.status(404).json({ msg: 'Teacher not found' });
         res.render('teacherDashboard', { teacher });
     } catch (err) {
