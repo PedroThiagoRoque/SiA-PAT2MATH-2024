@@ -6,7 +6,7 @@ const Problem = require('../models/Problem');
 // Função para calcular o progresso
 const calculateProgress = (student, classItem) => {
   const totalProblems = classItem.problems.length;
-  const solvedProblems = student.solvedProblems ? student.solvedProblems.filter(problemId => classItem.problems.includes(problemId.toString())).length : 0;
+  const solvedProblems = student.solvedProblems ? student.solvedProblems.filter(problemId => classItem.problems.some(p => p._id.equals(problemId))).length : 0;
   return totalProblems ? (solvedProblems / totalProblems) * 100 : 0;
 };
 
@@ -105,8 +105,39 @@ const accessExercise = async (req, res) => {
   }
 };
 
+// Submeter resposta do exercício
+const submitExercise = async (req, res) => {
+  const { classId, problemId } = req.params;
+  const { answer } = req.body;
+  const studentId = req.user.id;
+
+  try {
+    const student = await Student.findOne({ userId: studentId });
+    const problem = await Problem.findById(problemId);
+
+    if (!student || !problem) {
+      return res.status(400).json({ msg: 'Estudante ou Problema não encontrado' });
+    }
+
+    // Verificar a resposta (supondo que a resposta correta esteja armazenada no campo 'result' do problema)
+    if (answer === problem.result) {
+      // Adicionar problema à lista de problemas resolvidos do estudante
+      if (!student.solvedProblems.includes(problemId)) {
+        student.solvedProblems.push(problemId);
+        await student.save();
+      }
+    }
+
+    res.redirect(`/api/student/dashboard`);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Erro no servidor');
+  }
+};
+
 module.exports = {
   joinClass,
   listStudentClasses,
-  accessExercise
+  accessExercise,
+  submitExercise
 };
