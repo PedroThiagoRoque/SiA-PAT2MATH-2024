@@ -11,6 +11,12 @@ const StudentSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Class'
     }
+  ],
+  solvedProblems: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Problem'
+    }
   ]
 });
 

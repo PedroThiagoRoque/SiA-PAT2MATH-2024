@@ -31,10 +31,14 @@
             <div id="collapse<%= index %>" class="collapse" aria-labelledby="heading<%= index %>" data-parent="#accordionExample">
               <div class="card-body">
                 <p><strong>Código da Turma:</strong> <%= classItem.classCode %></p>
+                <p><strong>Progresso:</strong> <%= classItem.progress %> %</p>
                 <h3>Problemas</h3>
                 <ul>
                   <% classItem.problems.forEach(problem => { %>
-                    <li><%= problem %></li>
+                    <li>
+                      <%= problem.title %>
+                      <a href="/api/student/exercise/<%= classItem._id %>/<%= problem._id %>" class="btn btn-sm btn-primary">Resolver</a>
+                    </li>
                   <% }) %>
                 </ul>
               </div>
