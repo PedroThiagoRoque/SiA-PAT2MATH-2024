@@ -17,12 +17,37 @@
       <button type="submit" class="btn btn-primary">Entrar na Turma</button>
     </form>
     <h2>Minhas Turmas</h2>
-    <ul id="student-class-list">
-      <!-- Lista de turmas do estudante aqui -->
-    </ul>
+    <div class="accordion" id="accordionExample">
+      <% if (classes && classes.length > 0) { %>
+        <% classes.forEach((classItem, index) => { %>
+          <div class="card">
+            <div class="card-header" id="heading<%= index %>">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+                  <%= classItem.name %> - Professor: <%= classItem.teacher.userId.name %>
+                </button>
+              </h5>
+            </div>
+            <div id="collapse<%= index %>" class="collapse" aria-labelledby="heading<%= index %>" data-parent="#accordionExample">
+              <div class="card-body">
+                <p><strong>Código da Turma:</strong> <%= classItem.classCode %></p>
+                <h3>Problemas</h3>
+                <ul>
+                  <% classItem.problems.forEach(problem => { %>
+                    <li><%= problem %></li>
+                  <% }) %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>Você não está inscrito em nenhuma turma.</p>
+      <% } %>
+    </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

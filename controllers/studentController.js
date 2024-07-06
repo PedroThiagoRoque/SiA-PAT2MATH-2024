@@ -36,6 +36,34 @@ const joinClass = async (req, res) => {
   }
 };
 
+// Listar turmas do estudante
+const listStudentClasses = async (req, res) => {
+  const studentId = req.user.id;
+
+  try {
+    const student = await Student.findOne({ userId: studentId }).populate({
+      path: 'classes',
+      populate: {
+        path: 'teacher',
+        populate: {
+          path: 'userId',
+          model: 'User'
+        }
+      }
+    });
+
+    if (!student) {
+      return res.status(400).json({ msg: 'Estudante não encontrado' });
+    }
+
+    res.render('student/dashboard', { classes: student.classes });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Erro no servidor');
+  }
+};
+
 module.exports = {
-  joinClass
+  joinClass,
+  listStudentClasses
 };
