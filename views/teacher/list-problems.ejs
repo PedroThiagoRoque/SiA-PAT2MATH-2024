@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listar Problemas</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .difficulty-easy { color: green; }
+    .difficulty-medium { color: orange; }
+    .difficulty-hard { color: red; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Listar Problemas</h1>
+    <a href="/api/teacher/create-problem" class="btn btn-primary mb-3">Cadastrar Novo Problema</a>
+
+    <h2>Meus Exercícios</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Enunciado</th>
+          <th>Equação</th>
+          <th>Resultado</th>
+          <th>Dificuldade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% myProblems.forEach(problem => { %>
+          <tr>
+            <td><%= problem.title %></td>
+            <td><%= problem.statement %></td>
+            <td><%= problem.equation %></td>
+            <td><%= problem.result %></td>
+            <td class="difficulty-<%= problem.difficulty %>">
+              <%= problem.difficulty === 'easy' ? 'Fácil' : problem.difficulty === 'medium' ? 'Médio' : 'Difícil' %>
+            </td>
+            <td>
+              <a href="/api/teacher/edit-problem/<%= problem._id %>" class="btn btn-sm btn-warning">Editar</a>
+              <form action="/api/teacher/delete-problem/<%= problem._id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <h2>Banco de Exercícios</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Enunciado</th>
+          <th>Equação</th>
+          <th>Resultado</th>
+          <th>Dificuldade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% otherProblems.forEach(problem => { %>
+          <tr>
+            <td><%= problem.title %></td>
+            <td><%= problem.statement %></td>
+            <td><%= problem.equation %></td>
+            <td><%= problem.result %></td>
+            <td class="difficulty-<%= problem.difficulty %>">
+              <%= problem.difficulty === 'easy' ? 'Fácil' : problem.difficulty === 'medium' ? 'Médio' : 'Difícil' %>
+            </td>
+            <td>
+              <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#viewProblemModal<%= problem._id %>">Visualizar</button>
+
+              <!-- Modal -->
+              <div class="modal fade" id="viewProblemModal<%= problem._id %>" tabindex="-1" role="dialog" aria-labelledby="viewProblemModalLabel<%= problem._id %>" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="viewProblemModalLabel<%= problem._id %>">Detalhes do Problema</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p><strong>Título:</strong> <%= problem.title %></p>
+                      <p><strong>Enunciado:</strong> <%= problem.statement %></p>
+                      <p><strong>Equação:</strong> <%= problem.equation %></p>
+                      <p><strong>Resultado:</strong> <%= problem.result %></p>
+                      <p><strong>Dificuldade:</strong> <%= problem.difficulty === 'easy' ? 'Fácil' : problem.difficulty === 'medium' ? 'Médio' : 'Difícil' %></p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
