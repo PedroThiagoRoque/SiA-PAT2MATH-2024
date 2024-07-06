@@ -9,12 +9,47 @@
 <body>
   <div class="container">
     <h1>Dashboard do Professor</h1>
-    <a href="/api/teacher/create-class" class="btn btn-primary">Criar Turma</a>
-    <a href="/api/teacher/create-problem" class="btn btn-secondary">Cadastrar Problema</a>
+    <a href="/api/teacher/create-class" class="btn btn-primary mb-3">Criar Turma</a>
+    <a href="/api/teacher/create-problem" class="btn btn-secondary mb-3">Cadastrar Problema</a>
     <h2>Minhas Turmas</h2>
-    <ul id="class-list">
-      <!-- Lista de turmas do professor -->
-    </ul>
+    <div class="accordion" id="accordionExample">
+      <% classes.forEach((classItem, index) => { %>
+        <div class="card">
+          <div class="card-header" id="heading<%= index %>">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+                <%= classItem.name %>
+              </button>
+            </h5>
+          </div>
+
+          <div id="collapse<%= index %>" class="collapse" aria-labelledby="heading<%= index %>" data-parent="#accordionExample">
+            <div class="card-body">
+              <p><strong>Código da Turma:</strong> <%= classItem.classCode %></p>
+              <a href="/api/teacher/edit-class/<%= classItem._id %>" class="btn btn-sm btn-warning">Editar</a>
+              <a href="/api/teacher/delete-class/<%= classItem._id %>" class="btn btn-sm btn-danger">Excluir</a>
+              <h3>Alunos Matriculados</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% classItem.students.forEach(student => { %>
+                    <tr>
+                      <td><%= student.userId.name %></td>
+                      <td><%= student.userId.email %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
