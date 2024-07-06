@@ -3,14 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
+  <title>Criar Turma</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1>Bem-vindo ao SiA</h1>
-    <a href="/api/auth/register" class="btn btn-primary">Registrar</a>
-    <a href="/api/auth/login" class="btn btn-secondary">Login</a>
+    <h1>Criar Turma</h1>
+    <form action="/api/teacher/create-class" method="POST">
+      <div class="form-group">
+        <label for="name">Nome da Turma</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="problems">IDs dos Problemas (separados por vírgula)</label>
+        <input type="text" class="form-control" id="problems" name="problems">
+      </div>
+      <button type="submit" class="btn btn-primary">Criar</button>
+    </form>
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

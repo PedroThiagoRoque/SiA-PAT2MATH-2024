@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
+  <title>Dashboard do Professor</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1>Bem-vindo ao SiA</h1>
-    <a href="/api/auth/register" class="btn btn-primary">Registrar</a>
-    <a href="/api/auth/login" class="btn btn-secondary">Login</a>
+    <h1>Dashboard do Professor</h1>
+    <a href="/api/teacher/create-class" class="btn btn-primary">Criar Turma</a>
+    <a href="/api/teacher/create-problem" class="btn btn-secondary">Cadastrar Problema</a>
+    <h2>Minhas Turmas</h2>
+    <ul id="class-list">
+      <!-- Lista de turmas do professor -->
+    </ul>
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

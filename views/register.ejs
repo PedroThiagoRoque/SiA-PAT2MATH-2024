@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Registrar</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <div class="row">
       <div class="col-md-6 offset-md-3">
-        <h2>Login</h2>
-        <form action="/api/auth/login" method="POST">
+        <h2>Registrar</h2>
+        <form action="/api/auth/register" method="POST">
+          <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
           <div class="form-group">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" name="email" required>
@@ -20,7 +24,14 @@
             <label for="password">Senha</label>
             <input type="password" class="form-control" id="password" name="password" required>
           </div>
-          <button type="submit" class="btn btn-primary">Login</button>
+          <div class="form-group">
+            <label for="role">Tipo de Usuário</label>
+            <select class="form-control" id="role" name="role" required>
+              <option value="student">Estudante</option>
+              <option value="teacher">Professor</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
       </div>
     </div>

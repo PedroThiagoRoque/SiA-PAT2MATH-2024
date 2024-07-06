@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Problema</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>Cadastrar Problema</h1>
+    <form action="/api/teacher/create-problem" method="POST">
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="statement">Enunciado</label>
+        <textarea class="form-control" id="statement" name="statement" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="equation">Equação</label>
+        <input type="text" class="form-control" id="equation" name="equation" required>
+      </div>
+      <div class="form-group">
+        <label for="result">Resultado</label>
+        <input type="text" class="form-control" id="result" name="result" required>
+      </div>
+      <div class="form-group">
+        <label for="difficulty">Dificuldade</label>
+        <select class="form-control" id="difficulty" name="difficulty" required>
+          <option value="easy">Fácil</option>
+          <option value="medium">Médio</option>
+          <option value="hard">Difícil</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

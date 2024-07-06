@@ -1,26 +1,41 @@
-const Student = require('../models/student');
-const User = require('../models/user');
+const Class = require('../models/Class');
+const Student = require('../models/Student');
 
-exports.getStudentDashboard = async (req, res) => {
-    try {
-        const student = await Student.findOne({ userId: req.user.id }).populate('enrolledCourses');
-        if (!student) return res.status(404).json({ msg: 'Estudante não encontrado' });
+// Entrar em uma turma
+const joinClass = async (req, res) => {
+  const { classCode } = req.body;
+  const studentId = req.user.id;
 
-        res.json(student);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
+  try {
+    const student = await Student.findOne({ userId: studentId });
+
+    if (!student) {
+      return res.status(400).json({ msg: 'Estudante não encontrado' });
     }
+
+    const classToJoin = await Class.findOne({ classCode });
+
+    if (!classToJoin) {
+      return res.status(400).json({ msg: 'Turma não encontrada' });
+    }
+
+    if (classToJoin.students.includes(student._id)) {
+      return res.status(400).json({ msg: 'Você já está nesta turma' });
+    }
+
+    classToJoin.students.push(student._id);
+    await classToJoin.save();
+
+    student.classes.push(classToJoin._id);
+    await student.save();
+
+    res.redirect('/api/student/dashboard');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Erro no servidor');
+  }
 };
 
-exports.getStudentPerformance = async (req, res) => {
-    try {
-        const student = await Student.findOne({ userId: req.user.id });
-        if (!student) return res.status(404).json({ msg: 'Estudante não encontrado' });
-
-        res.json(student.performance);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
-    }
+module.exports = {
+  joinClass
 };
