@@ -106,36 +106,6 @@ const accessExercise = async (req, res) => {
   }
 };
 
-// Submeter resposta do exercício
-const submitExercise = async (req, res) => {
-  const { classId, problemId } = req.params;
-  const { answer } = req.body;
-  const studentId = req.user.id;
-
-  try {
-    const student = await Student.findOne({ userId: studentId });
-    const problem = await Problem.findById(problemId);
-
-    if (!student || !problem) {
-      return res.status(400).json({ msg: 'Estudante ou Problema não encontrado' });
-    }
-
-    // Verificar a resposta (supondo que a resposta correta esteja armazenada no campo 'result' do problema)
-    if (answer === problem.result) {
-      // Adicionar problema à lista de problemas resolvidos do estudante
-      if (!student.solvedProblems.includes(problemId)) {
-        student.solvedProblems.push(problemId);
-        await student.save();
-      }
-    }
-
-    res.redirect(`/api/student/dashboard`);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Erro no servidor');
-  }
-};
-
 ///////////////////////////////////
 
 // Submeter passo de resolução
@@ -145,20 +115,24 @@ const submitStep = (req, res) => {
   try {
     let steps = solveEquation(nextStep);
     let valid = false;
+    let isFinalAnswer = false;
 
     // Verificar se o passo inserido é o resultado final
-    if (steps.length === 0 && nextStep === finalAnswer) { //ultima entrada
+    if (steps.length === 0 && nextStep === finalAnswer) {
       valid = true;
+      isFinalAnswer = true;
       steps = [nextStep];
     } else {
       const lastStep = steps[steps.length - 1];
-      valid = lastStep === finalAnswer; //passo de resolução
+      if (lastStep === finalAnswer) {
+        valid = lastStep === finalAnswer;
+      }
     }
 
-    res.json({ steps, valid });
+    res.json({ steps, valid, isFinalAnswer });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ steps: [], valid: false });
+    res.status(500).json({ steps: [], valid: false, isFinalAnswer: false });
   }
 };
 
@@ -167,6 +141,5 @@ module.exports = {
   joinClass,
   listStudentClasses,
   accessExercise,
-  submitExercise,
   submitStep,
 };

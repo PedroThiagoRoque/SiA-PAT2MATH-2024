@@ -9,6 +9,8 @@
     .step-input { margin-bottom: 10px; }
     .step-valid { background-color: #d4edda; }  /* verde */
     .step-invalid { background-color: #f8d7da; } /* vermelho */
+    .step-final { background-color: #d0e7ff; }   /* azul */
+    .step-final:disabled { background-color: #d0e7ff; opacity: 1; } /* azul quando desabilitado */
   </style>
 </head>
 <body>
@@ -53,19 +55,24 @@
             solutionStepsContainer.appendChild(stepElement);
           });
 
-          if (result.valid) {
+          if (result.isFinalAnswer) {
+            stepInput.classList.add('step-final');
+            stepInput.classList.remove('step-valid', 'step-invalid');
+            addStepButton.disabled = true; // Desabilitar o botão de adicionar passo
+            stepInput.disabled = true; // Desabilitar o campo de entrada
+          } else if (result.valid) {
             stepInput.classList.add('step-valid');
-            stepInput.classList.remove('step-invalid');
+            stepInput.classList.remove('step-invalid', 'step-final');
           } else {
             stepInput.classList.add('step-invalid');
-            stepInput.classList.remove('step-valid');
+            stepInput.classList.remove('step-valid', 'step-final');
           }
         } else {
           const errorMessage = document.createElement('p');
           errorMessage.textContent = 'Nenhuma solução encontrada.';
           solutionStepsContainer.appendChild(errorMessage);
           stepInput.classList.add('step-invalid');
-          stepInput.classList.remove('step-valid');
+          stepInput.classList.remove('step-valid', 'step-final');
         }
       });
 
@@ -74,6 +81,8 @@
   </script>
 </body>
 </html>
+
+
 
 <!--
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
