@@ -3,25 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exercício</title>
+  <title>Resolução de Exercício</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .step-input { margin-bottom: 10px; }
+    .step-valid { background-color: #d4edda; }  /* verde */
+    .step-invalid { background-color: #f8d7da; } /* vermelho */
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1><%= problem.title %></h1>
-    <p><strong>Enunciado:</strong> <%= problem.statement %></p>
-    <p><strong>Equação:</strong> <%= problem.equation %></p>
-    <p><strong>Dificuldade:</strong> <%= problem.difficulty %></p>
-    <form action="/api/student/submit-exercise/<%= classItem._id %>/<%= problem._id %>" method="POST">
-      <div class="form-group">
-        <label for="answer">Resposta</label>
-        <input type="text" class="form-control" id="answer" name="answer" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Enviar Resposta</button>
-    </form>
+    <h1>Resolução de Exercício</h1>
+    <p><strong>Problema:</strong> <%= problem.statement %></p>
+    <div id="steps-container">
+      <!-- Campos para inserção de passos -->
+    </div>
+    <button id="add-step" class="btn btn-primary">Adicionar Passo</button>
+    <div id="solution-steps"></div>
   </div>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    const stepsContainer = document.getElementById('steps-container');
+    const addStepButton = document.getElementById('add-step');
+    const solutionStepsContainer = document.getElementById('solution-steps');
+    const finalAnswer = '<%= problem.result %>'; // A resposta final do problema
+
+    addStepButton.addEventListener('click', () => {
+      const stepInput = document.createElement('input');
+      stepInput.type = 'text';
+      stepInput.className = 'form-control step-input';
+      stepInput.placeholder = 'Insira o próximo passo';
+
+      stepInput.addEventListener('blur', async () => {
+        const nextStep = stepInput.value;
+
+        const response = await fetch('/api/student/submit-step', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nextStep, finalAnswer })
+        });
+
+        const result = await response.json();
+
+        solutionStepsContainer.innerHTML = '';
+        if (result.steps && result.steps.length > 0) {
+          result.steps.forEach(step => {
+            const stepElement = document.createElement('p');
+            stepElement.textContent = step;
+            solutionStepsContainer.appendChild(stepElement);
+          });
+
+          if (result.valid) {
+            stepInput.classList.add('step-valid');
+            stepInput.classList.remove('step-invalid');
+          } else {
+            stepInput.classList.add('step-invalid');
+            stepInput.classList.remove('step-valid');
+          }
+        } else {
+          const errorMessage = document.createElement('p');
+          errorMessage.textContent = 'Nenhuma solução encontrada.';
+          solutionStepsContainer.appendChild(errorMessage);
+          stepInput.classList.add('step-invalid');
+          stepInput.classList.remove('step-valid');
+        }
+      });
+
+      stepsContainer.appendChild(stepInput);
+    });
+  </script>
 </body>
 </html>
+
+<!--
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ -->

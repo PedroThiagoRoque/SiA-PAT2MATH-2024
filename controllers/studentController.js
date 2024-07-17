@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Class = require('../models/Class');
 const Student = require('../models/Student');
 const Problem = require('../models/Problem');
+const { solveEquation } = require('../modules/expert');
 
 // Função para calcular o progresso
 const calculateProgress = (student, classItem) => {
@@ -135,9 +136,37 @@ const submitExercise = async (req, res) => {
   }
 };
 
+///////////////////////////////////
+
+// Submeter passo de resolução
+const submitStep = (req, res) => {
+  const { nextStep, finalAnswer } = req.body;
+
+  try {
+    let steps = solveEquation(nextStep);
+    let valid = false;
+
+    // Verificar se o passo inserido é o resultado final
+    if (steps.length === 0 && nextStep === finalAnswer) { //ultima entrada
+      valid = true;
+      steps = [nextStep];
+    } else {
+      const lastStep = steps[steps.length - 1];
+      valid = lastStep === finalAnswer; //passo de resolução
+    }
+
+    res.json({ steps, valid });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ steps: [], valid: false });
+  }
+};
+
+
 module.exports = {
   joinClass,
   listStudentClasses,
   accessExercise,
-  submitExercise
+  submitExercise,
+  submitStep,
 };
