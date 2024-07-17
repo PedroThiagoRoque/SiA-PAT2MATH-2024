@@ -109,8 +109,9 @@ const accessExercise = async (req, res) => {
 ///////////////////////////////////
 
 // Submeter passo de resolução
-const submitStep = (req, res) => {
-  const { nextStep, finalAnswer } = req.body;
+const submitStep = async (req, res) => {
+  const { nextStep, finalAnswer, problemId} = req.body;
+  const userId = req.user.id; 
 
   try {
     let steps = solveEquation(nextStep);
@@ -127,6 +128,14 @@ const submitStep = (req, res) => {
       if (lastStep === finalAnswer) {
         valid = lastStep === finalAnswer;
       }
+    }
+
+    if (isFinalAnswer) {
+      // Adicionar o problema ao perfil do usuário
+      await Student.findOneAndUpdate(
+        { userId: userId },
+        { $addToSet: { solvedProblems: problemId } }
+      );
     }
 
     res.json({ steps, valid, isFinalAnswer });

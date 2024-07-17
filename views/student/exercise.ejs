@@ -15,8 +15,10 @@
 </head>
 <body>
   <div class="container">
-    <h1>Resolução de Exercício</h1>
-    <p><strong>Problema:</strong> <%= problem.statement %></p>
+    <h1>Resolução: <%= problem.title %></h1>
+    <p><strong>Enunciado:</strong> <%= problem.statement %></p>
+    <p><strong>Equação:</strong> <%= problem.equation %></p>
+    <p><strong>Dificuldade:</strong> <%= problem.difficulty %></p>
     <div id="steps-container">
       <!-- Campos para inserção de passos -->
     </div>
@@ -29,6 +31,7 @@
     const addStepButton = document.getElementById('add-step');
     const solutionStepsContainer = document.getElementById('solution-steps');
     const finalAnswer = '<%= problem.result %>'; // A resposta final do problema
+    const problemId = '<%= problem._id %>'; // O ID do problema
 
     addStepButton.addEventListener('click', () => {
       const stepInput = document.createElement('input');
@@ -42,7 +45,7 @@
         const response = await fetch('/api/student/submit-step', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nextStep, finalAnswer })
+          body: JSON.stringify({ nextStep, finalAnswer, problemId })
         });
 
         const result = await response.json();
@@ -58,8 +61,8 @@
           if (result.isFinalAnswer) {
             stepInput.classList.add('step-final');
             stepInput.classList.remove('step-valid', 'step-invalid');
-            addStepButton.disabled = true; // Desabilitar o botão de adicionar passo
             stepInput.disabled = true; // Desabilitar o campo de entrada
+            addStepButton.disabled = true; // Desabilitar o botão de adicionar passo
           } else if (result.valid) {
             stepInput.classList.add('step-valid');
             stepInput.classList.remove('step-invalid', 'step-final');
