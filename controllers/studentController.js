@@ -4,11 +4,12 @@ const Student = require('../models/Student');
 const Problem = require('../models/Problem');
 const { solveEquation } = require('../modules/expert');
 
-// Função para calcular o progresso
+// Calcular progresso
 const calculateProgress = (student, classItem) => {
+  const solvedProblems = student.solvedProblems.map(p => p.toString());
   const totalProblems = classItem.problems.length;
-  const solvedProblems = student.solvedProblems ? student.solvedProblems.filter(problemId => classItem.problems.some(p => p._id.equals(problemId))).length : 0;
-  return totalProblems ? (solvedProblems / totalProblems) * 100 : 0;
+  const solvedCount = classItem.problems.filter(problem => solvedProblems.includes(problem._id.toString())).length;
+  return totalProblems === 0 ? 0 : Math.round((solvedCount / totalProblems) * 100);
 };
 
 // Entrar em uma turma
@@ -66,7 +67,7 @@ const listStudentClasses = async (req, res) => {
           model: 'Problem'
         }
       ]
-    });
+    }).populate('solvedProblems');
 
     if (!student) {
       return res.status(400).json({ msg: 'Estudante não encontrado' });
@@ -79,7 +80,7 @@ const listStudentClasses = async (req, res) => {
       };
     });
 
-    res.render('student/dashboard', { classes: classesWithProgress });
+    res.render('student/dashboard', { classes: classesWithProgress, solvedProblems: student.solvedProblems });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Erro no servidor');

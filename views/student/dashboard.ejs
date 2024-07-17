@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard do Estudante</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .resolved {
+      color: darkgreen;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -37,6 +43,9 @@
                   <% classItem.problems.forEach(problem => { %>
                     <li>
                       <%= problem.title %>
+                      <% if (solvedProblems.some(solvedProblem => solvedProblem._id.toString() === problem._id.toString())) { %>
+                        <span class="resolved"> (resolvido)</span>
+                      <% } %>
                       <a href="/api/student/exercise/<%= classItem._id %>/<%= problem._id %>" class="btn btn-sm btn-primary">Resolver</a>
                     </li>
                   <% }) %>
