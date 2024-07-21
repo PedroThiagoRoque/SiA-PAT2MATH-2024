@@ -3,15 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
+  <title>PAT2MATH v2 - Home</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .body{
+      height: 100vh;
+    }
+    .hero-section {
+      background: url('/images/backgroundP2M.jpg') no-repeat center center;
+      background-size: cover;
+      height: 100vh;
+      color: white;
+    }
+    .hero-overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .btn-custom {
+      background-color: #007bff;
+      border: none;
+    }
+    .navbar-custom {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .content {
+      margin-top: 56px; /* Height of the navbar */
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Bem-vindo ao SiA</h1>
-    <a href="/api/auth/register" class="btn btn-primary">Registrar</a>
-    <a href="/api/auth/login" class="btn btn-secondary">Login</a>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" style="background-color:#010203;">
+    <a class="navbar-brand" href="#">PAT2MATH v2</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Hub de Aprendizado</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Para Estudantes e Pais</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Para Escolas e Associações</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/api/auth/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-light btn-custom" href="/api/auth/register">Registrar</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="hero-section">
+    <div class="hero-overlay content">
+      <div class="text-center">
+        <h1 class="display-4">PAT2MATH v2</h1>
+        <h1 class="display-4">A nova maneira de excelência em matemática</h1>
+        <p class="lead">Uma plataforma interativa com um ambiente de aprendizado inclusivo</p>
+        <a href="/api/auth/login" class="btn btn-primary btn-lg">Começar</a>
+      </div>
+    </div>
   </div>
+
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
