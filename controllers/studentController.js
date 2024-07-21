@@ -8,7 +8,7 @@ const { solveEquation } = require('../modules/expert');
 const calculateProgress = (student, classItem) => {
   const solvedProblems = student.solvedProblems.map(p => p.toString());
   const totalProblems = classItem.problems.length;
-  const solvedCount = classItem.problems.filter(problem => solvedProblems.includes(problem._id.toString())).length;
+  const solvedCount = classItem.problems.filter(problem => solvedProblems.includes(problem.toString())).length;
   return totalProblems === 0 ? 0 : Math.round((solvedCount / totalProblems) * 100);
 };
 
@@ -152,4 +152,5 @@ module.exports = {
   listStudentClasses,
   accessExercise,
   submitStep,
+  calculateProgress
 };

@@ -6,22 +6,109 @@
   <title>Dashboard do Estudante</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar-custom {
+      background-color: #141414;
+      color: #fff!important;
+      border-radius: 0;
+    }
+    .navbar-dark .navbar-nav .nav-link{
+      color: #fff!important;
+    }
+
+    .hero-section {
+      background: url('/images/banner02.jpg') no-repeat center center;
+      background-size: cover;
+      height: 20vh;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .hero-overlay {
+      background-color: rgba(88, 64, 146, 0.25);
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-overlay h1{
+      text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.7);
+    }
+    .dashboard-container {
+      margin-top: 20px;
+    }
+    .accordion .card {
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      background-color: #191919;
+      color: #fff;
+      border-radius: 10px 10px 0 0;
+      padding: 15px;
+    }
+    .card-body {
+      background-color: #fff;
+      border-radius: 0 0 10px 10px;
+      padding: 15px;
+    }
     .resolved {
       color: darkgreen;
       font-weight: bold;
     }
+    .btn-primary {
+      background-color: #8C64ED;
+      border-color: #8C64ED;
+      color: #fff!important;
+      border-radius: 20px;
+    }
+    .btn-primary:hover {
+      background-color: #6f42c1;
+      border-color: #6f42c1;
+    }
+    .btn-link {
+      color: #fff;
+    }
+    .btn-link:hover {
+      color: #d3d3d3;
+    }
+    .form-control {
+      border-radius: 20px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Dashboard do Estudante</h1>
-    <form action="/api/student/join-class" method="POST">
-      <div class="form-group">
-        <label for="classCode">Código da Turma</label>
-        <input type="text" class="form-control" id="classCode" name="classCode" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Entrar na Turma</button>
-    </form>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <a class="navbar-brand" href="/">PAT2MATH</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#">Hub de Aprendizado</a>
+        </li> -->
+        <li class="nav-item">
+          <button class="nav-link btn btn-primary" data-toggle="modal" data-target="#joinClassModal">Entrar na Turma</button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="hero-section">
+    <div class="hero-overlay">
+      <h1>Mantenha o Progresso e Alcance a Excelência!</h1>
+    </div>
+  </div>
+
+  <div class="container dashboard-container">
     <h2>Minhas Turmas</h2>
     <div class="accordion" id="accordionExample">
       <% if (classes && classes.length > 0) { %>
@@ -29,8 +116,8 @@
           <div class="card">
             <div class="card-header" id="heading<%= index %>">
               <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
-                  <%= classItem.name %> - Professor: <%= classItem.teacher.userId.name %>
+                <button class="btn btn-link text-left" type="button" data-toggle="collapse" data-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+                  <strong><%= classItem.name %></strong> - Professor: <%= classItem.teacher.userId.name %>
                 </button>
               </h5>
             </div>
@@ -39,14 +126,18 @@
                 <p><strong>Código da Turma:</strong> <%= classItem.classCode %></p>
                 <p><strong>Progresso:</strong> <%= classItem.progress %> %</p>
                 <h3>Problemas</h3>
-                <ul>
+                <ul class="list-group">
                   <% classItem.problems.forEach(problem => { %>
-                    <li>
-                      <%= problem.title %>
-                      <% if (solvedProblems.some(solvedProblem => solvedProblem._id.toString() === problem._id.toString())) { %>
-                        <span class="resolved"> (resolvido)</span>
-                      <% } %>
-                      <a href="/api/student/exercise/<%= classItem._id %>/<%= problem._id %>" class="btn btn-sm btn-primary">Resolver</a>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5><%= problem.title %></h5>
+                        <p>Equação: <%= problem.equation %></p>
+                        <p>Dificuldade: <%= problem.difficulty %></p>
+                        <% if (solvedProblems.some(solvedProblem => solvedProblem._id.toString() === problem._id.toString())) { %>
+                          <span class="resolved">Resolvido</span>
+                        <% } %>
+                      </div>
+                      <a href="/api/student/exercise/<%= classItem._id %>/<%= problem._id %>" class="btn btn-primary">Resolver</a>
                     </li>
                   <% }) %>
                 </ul>
@@ -59,6 +150,30 @@
       <% } %>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="joinClassModal" tabindex="-1" aria-labelledby="joinClassModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="joinClassModalLabel">Entrar na Turma</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/api/student/join-class" method="POST">
+            <div class="form-group">
+              <label for="classCode">Código da Turma</label>
+              <input type="text" class="form-control" id="classCode" name="classCode" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar na Turma</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
