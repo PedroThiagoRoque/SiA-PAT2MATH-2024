@@ -15,30 +15,34 @@
     }
     .register-box {
       background: #fff;
-      border-radius: 8px;
+      border-radius: 20px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      padding: 30px;
       max-width: 500px;
       width: 100%;
       text-align: center;
+      overflow: hidden;
+      padding: 20px; /* Adicionando padding ao redor do card */
     }
     .register-box img {
       width: 100%;
-      height: 100px;
-      object-fit: contain;
-      margin-bottom: 20px;
-      border-radius: 20px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 20px 20px 0 0; /* Cantos arredondados no topo */
     }
     .register-box h2 {
-      margin-bottom: 20px;
+      margin: 20px 0;
       font-weight: 300;
     }
     .register-box .form-control {
       border-radius: 20px;
       margin-bottom: 20px;
+      padding-left: 15px;
+      padding-right: 15px; /* Adicionando padding horizontal aos inputs */
     }
     .register-box .btn {
       border-radius: 20px;
+      margin-left: 15px;
+      margin-right: 15px; /* Adicionando margin horizontal aos botões */
     }
     .register-box a {
       display: block;
@@ -49,8 +53,8 @@
 <body>
   <div class="register-container">
     <div class="register-box">
-      <img src="/images/banner01.jpg" alt="PAT2MATH Logo">
-      <h2>Registrar</h2>
+      <img src="/images/banner02.jpg" alt="PAT2MATH Logo">
+      <h2>Registre-se no PAT2MATH</h2>
       <form action="/api/auth/register" method="POST">
         <div class="form-group">
           <input type="text" class="form-control" id="name" name="name" placeholder="Nome" required>

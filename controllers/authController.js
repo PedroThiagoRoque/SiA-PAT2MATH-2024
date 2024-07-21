@@ -69,13 +69,13 @@ const loginUser = async (req, res) => {
     // Verificar se o usuário existe
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ msg: 'Credenciais inválidas' });
+      return res.redirect('/api/auth/login?error=Credenciais inválidas');
     }
 
     // Comparar a senha
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ msg: 'Credenciais inválidas' });
+      return res.redirect('/api/auth/login?error=Credenciais inválidas');
     }
 
     // Criar o token JWT
