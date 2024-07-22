@@ -49,7 +49,7 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     .card-header {
-      background-color: #191919;
+      background-color: #8C64ED;
       color: #fff;
       border-radius: 10px 10px 0 0;
       padding: 15px;
@@ -96,16 +96,16 @@
   </nav>
 
   <div class="hero-section">
-    <div class="hero-overlay">
-      <h1>Quem ensina aprende ao ensinar. E quem aprende ensina ao aprender.</h1>
-    </div>
+    <!-- <div class="hero-overlay">
+      <h1></h1>
+    </div> -->
   </div>
 
   <div class="container dashboard-container">
     <h1>Dashboard do Professor</h1>
     <a href="/api/teacher/create-class" class="btn btn-primary mb-3">Criar Turma</a>
-    <a href="/api/teacher/create-problem" class="btn btn-secondary mb-3">Cadastrar Problema</a>
-    <a href="/api/teacher/list-problems" class="btn btn-info mb-3">Gerenciar Problemas</a>
+    <a href="/api/teacher/create-problem" class="btn btn-primary mb-3">Cadastrar Problema</a>
+    <a href="/api/teacher/list-problems" class="btn btn-primary mb-3">Gerenciar Problemas</a>
     <h2>Minhas Turmas</h2>
     <div class="accordion" id="accordionExample">
       <% classes.forEach((classItem, index) => { %>
