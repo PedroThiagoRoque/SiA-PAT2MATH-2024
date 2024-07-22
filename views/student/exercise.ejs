@@ -6,40 +6,138 @@
   <title>Resolução de Exercício</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    .step-input { margin-bottom: 10px; }
-    .step-valid { background-color: #d4edda; }  /* verde */
-    .step-invalid { background-color: #f8d7da; } /* vermelho */
-    .step-final { background-color: #d0e7ff; }   /* azul */
-    .step-final:disabled { background-color: #d0e7ff; opacity: 1; } /* azul quando desabilitado */
+    body {
+      background-color: #8C64ED; /* Fundo roxo padrão do projeto */
+      color: white;
+    }
+    .container-custom {
+      background-color: white;
+      color: black;
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .step-input {
+      margin-bottom: 10px;
+      max-width: 60%;
+      display: inline-block;
+    }
+    .step-valid {
+      background-color: #d4edda; /* verde */
+    }
+    .step-invalid {
+      background-color: #f8d7da; /* vermelho */
+    }
+    .step-final {
+      background-color: #d0e7ff; /* azul */
+    }
+    .step-final:disabled {
+      background-color: #d0e7ff;
+      opacity: 1;
+    } /* azul quando desabilitado */
+    .back-button {
+      background: none;
+      border: 2px solid black;
+      color: black;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5em;
+      margin-right: 10px;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border: 2px solid black;
+      color: black;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .step-action {
+      width: 40px;
+      height: 40px;
+      border: 2px solid black;
+      color: black;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .step-action:hover {
+      background-color: #e0e0e0;
+    }
+    .step-action.disabled {
+      border-color: #28a745;
+      background-color: #28a745;
+      color: white;
+      cursor: default;
+    }
+    .step-action.disabled:hover {
+      background-color: #28a745;
+    }
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .pat2math-header {
+      font-size: 1.5em;
+      color: #8C64ED;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container container-custom">
+    <div class="header-container">
+      <button class="back-button" onclick="window.location.href='/api/student/dashboard'">
+        &#x2190;
+      </button>
+      <div class="pat2math-header"><strong>PAT2MATH</strong></div>
+    </div>
     <h1>Resolução: <%= problem.title %></h1>
     <p><strong>Enunciado:</strong> <%= problem.statement %></p>
     <p><strong>Equação:</strong> <%= problem.equation %></p>
     <p><strong>Dificuldade:</strong> <%= problem.difficulty %></p>
     <div id="steps-container">
-      <!-- Campos para inserção de passos -->
+      <!-- Campo inicial para inserção de passo -->
+      <div class="step-item">
+        <div class="step-number">1</div>
+        <input type="text" class="form-control step-input" placeholder="Insira o próximo passo">
+        <div class="step-action">+</div>
+      </div>
     </div>
-    <button id="add-step" class="btn btn-primary">Adicionar Passo</button>
     <div id="solution-steps"></div>
   </div>
 
   <script>
     const stepsContainer = document.getElementById('steps-container');
-    const addStepButton = document.getElementById('add-step');
-    const solutionStepsContainer = document.getElementById('solution-steps');
     const finalAnswer = '<%= problem.result %>'; // A resposta final do problema
     const problemId = '<%= problem._id %>'; // O ID do problema
+    let stepCount = 1;
 
-    addStepButton.addEventListener('click', () => {
-      const stepInput = document.createElement('input');
-      stepInput.type = 'text';
-      stepInput.className = 'form-control step-input';
-      stepInput.placeholder = 'Insira o próximo passo';
-
-      stepInput.addEventListener('blur', async () => {
+    stepsContainer.addEventListener('click', async (event) => {
+      if (event.target.classList.contains('step-action') && !event.target.classList.contains('disabled')) {
+        const stepInput = event.target.previousElementSibling;
         const nextStep = stepInput.value;
 
         const response = await fetch('/api/student/submit-step', {
@@ -50,22 +148,47 @@
 
         const result = await response.json();
 
+        const solutionStepsContainer = document.getElementById('solution-steps');
         solutionStepsContainer.innerHTML = '';
         if (result.steps && result.steps.length > 0) {
           result.steps.forEach(step => {
-            const stepElement = document.createElement('p');
-            stepElement.textContent = step;
-            solutionStepsContainer.appendChild(stepElement);
+            //const stepElement = document.createElement('p');
+            //stepElement.textContent = step;
+            //solutionStepsContainer.appendChild(stepElement);
           });
 
           if (result.isFinalAnswer) {
             stepInput.classList.add('step-final');
             stepInput.classList.remove('step-valid', 'step-invalid');
             stepInput.disabled = true; // Desabilitar o campo de entrada
-            addStepButton.disabled = true; // Desabilitar o botão de adicionar passo
+            event.target.className = 'step-action disabled';
+            event.target.textContent = '✓';
           } else if (result.valid) {
             stepInput.classList.add('step-valid');
             stepInput.classList.remove('step-invalid', 'step-final');
+
+            // Adiciona novo passo
+            stepCount++;
+            const stepWrapper = document.createElement('div');
+            stepWrapper.className = 'step-item';
+
+            const stepNumber = document.createElement('div');
+            stepNumber.className = 'step-number';
+            stepNumber.textContent = stepCount;
+
+            const newStepInput = document.createElement('input');
+            newStepInput.type = 'text';
+            newStepInput.className = 'form-control step-input';
+            newStepInput.placeholder = 'Insira o próximo passo';
+
+            const stepAction = document.createElement('div');
+            stepAction.className = 'step-action';
+            stepAction.textContent = '+';
+
+            stepWrapper.appendChild(stepNumber);
+            stepWrapper.appendChild(newStepInput);
+            stepWrapper.appendChild(stepAction);
+            stepsContainer.appendChild(stepWrapper);
           } else {
             stepInput.classList.add('step-invalid');
             stepInput.classList.remove('step-valid', 'step-final');
@@ -77,18 +200,8 @@
           stepInput.classList.add('step-invalid');
           stepInput.classList.remove('step-valid', 'step-final');
         }
-      });
-
-      stepsContainer.appendChild(stepInput);
+      }
     });
   </script>
 </body>
 </html>
-
-
-
-<!--
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
- -->
