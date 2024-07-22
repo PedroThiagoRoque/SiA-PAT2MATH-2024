@@ -5,9 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard do Professor</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar-custom {
+      background-color: #141414;
+      color: #fff!important;
+      border-radius: 0;
+    }
+    .navbar-dark .navbar-nav .nav-link{
+      color: #fff!important;
+    }
+    .hero-section {
+      background: url('/images/banner02.jpg') no-repeat center center;
+      background-size: cover;
+      height: 20vh;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .hero-overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-overlay h1 {
+      font-size: 2em;
+    }
+    .dashboard-container {
+      margin-top: 20px;
+    }
+    .accordion .card {
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      background-color: #191919;
+      color: #fff;
+      border-radius: 10px 10px 0 0;
+      padding: 15px;
+    }
+    .card-body {
+      background-color: #fff;
+      border-radius: 0 0 10px 10px;
+      padding: 15px;
+    }
+    .btn-primary {
+      background-color: #8C64ED;
+      border-color: #8C64ED;
+      color: #fff!important;
+      border-radius: 20px;
+    }
+    .btn-link {
+      color: #fff;
+    }
+    .btn-link:hover {
+      color: #d3d3d3;
+    }
+    .btn-warning, .btn-danger, .btn-info {
+      border-radius: 20px;
+    }
+    .form-control {
+      border-radius: 20px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <a class="navbar-brand" href="/">PAT2MATH</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+       <!-- <li class="nav-item">
+          <a class="nav-link" href="#">Hub de Aprendizado</a>
+        </li> --> 
+        
+      </ul>
+    </div>
+  </nav>
+
+  <div class="hero-section">
+    <div class="hero-overlay">
+      <h1>Quem ensina aprende ao ensinar. E quem aprende ensina ao aprender.</h1>
+    </div>
+  </div>
+
+  <div class="container dashboard-container">
     <h1>Dashboard do Professor</h1>
     <a href="/api/teacher/create-class" class="btn btn-primary mb-3">Criar Turma</a>
     <a href="/api/teacher/create-problem" class="btn btn-secondary mb-3">Cadastrar Problema</a>
@@ -18,7 +112,7 @@
         <div class="card">
           <div class="card-header" id="heading<%= index %>">
             <h5 class="mb-0">
-              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+              <button class="btn btn-link text-left" type="button" data-toggle="collapse" data-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
                 <%= classItem.name %>
               </button>
             </h5>
@@ -52,6 +146,7 @@
       <% }) %>
     </div>
   </div>
+
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
